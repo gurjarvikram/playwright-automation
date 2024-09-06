@@ -1,5 +1,5 @@
 //const { test, expect } = require('@playwright/test');
-import {test, expect} from '@playwright/test';
+import { test, expect } from '@playwright/test';
 import loginPage from '../pageobjects/loginPage';
 
 
@@ -12,17 +12,17 @@ test.beforeEach(async ({ page }) => {
 });
 
 
-test('Verify the validation for login page', async ({page}) => {    
-       
-    await login.loginValidation()     
+test('Verify the validation for login page', async ({ page }) => {
+
+    await login.loginValidation()
     await page.waitForTimeout(3000)
 
     await expect(page).toHaveURL('https://www.saucedemo.com/')
 
 })
 
-test('Successful login with valid credentials', async ({page}) => {  
-    
+test('Successful login with valid credentials', async ({ page }) => {
+
     await login.loginSwag()
     console.log(await page.title());
     await page.waitForTimeout(3000)

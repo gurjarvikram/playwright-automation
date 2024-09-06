@@ -11,7 +11,6 @@ test.beforeEach(async ({ page }) => {
     await login.gotoLoginPage(); //Navigate to the login page
 });
 
-
 test('Verify the validation for login page', async ({ page }) => {
 
     await login.loginValidation()

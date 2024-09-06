@@ -1,6 +1,6 @@
 // const { test, expect } = require('@playwright/test');
 import { test, expect } from '@playwright/test';
-import { loginPage } from '../pages/loginPage';
+import { loginPage } from '../pageobjects/loginPage';
 
 
 test('Searching with an invalid product', async ({ page }) => {
@@ -13,7 +13,7 @@ test('Searching with an invalid product', async ({ page }) => {
     await expect(page).toHaveURL(/.*dashboard/);
 
     //redirect to product page
-    await page.getByText('CRM').click();
+    await page.getByText('Menu').click();
     await page.getByRole('link', { name: 'Product' }).click()
     await expect(page).toHaveURL(/.*product/);
 

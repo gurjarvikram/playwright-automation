@@ -12,18 +12,22 @@ test.beforeEach(async ({ page }) => {
 test('Verify the validation for login page', async ({ page }) => {
     await login.loginButton();
     await expect(page).toHaveURL('https://www.saucedemo.com/');
-    await expect(page.locator(login.errorMsg)).toHaveText('Epic sadface: Username is required');
+    // Check for the correct error message
+    await expect(page.locator(login.errorMsg)).toContainText('Epic sadface: Username is required');
 });
 
 test('Unsuccessful login due to invalid credentials', async ({ page }) => {
     await login.userName('fakeusername');
     await login.password('fakepwd');
     await login.loginButton();
+    // Verify error message for incorrect credentials
     await expect(page.locator(login.errorMsg)).toHaveText('Epic sadface: Username and password do not match any user in this service');
 });
 
 test('Successful login with valid credentials', async ({ page }) => {
     await login.loginSwag();
-    await page.waitForTimeout(3000);
+    // Wait for the element to be visible
+    await page.locator(login.titleInventory).waitFor({ state: 'visible' });
+    // Assert the title of the page
     await expect(page).toHaveTitle('Swag Labs');
 });

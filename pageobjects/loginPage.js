@@ -6,6 +6,7 @@ export default class loginPage {
         this.passwordInput = '#password';
         this.loginButtonLocator = "#login-button";
         this.errorMsg = "h3[data-test='error']";
+        this.titleInventory = "span[data-test='title']";
     }
 
     async gotoLoginPage() {

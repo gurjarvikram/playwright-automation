@@ -1,23 +1,86 @@
 // const { test, expect } = require('@playwright/test');
 import { test, expect } from '@playwright/test';
-import { loginPage } from '../pageobjects/loginPage';
+import { faker } from '@faker-js/faker';
+import loginPage from '../pageobjects/loginPage';
+import productPage from '../pageobjects/productPage';
 
 
-test('Searching with an invalid product', async ({ page }) => {
-    //Using login with POM
-    const login = new loginPage(page);
+const firstName = faker.person.firstName();
+const lastName = faker.person.lastName();
+const streetAddress = faker.location.streetAddress();
+
+let login;
+let prod;
+
+test.beforeEach(async ({ page }) => {
+    login = new loginPage(page);
     await login.gotoLoginPage()
-    await login.loginFD()
-    const tit_msg = await page.locator("h2[class='h2 mt-2 flex-auto text-xl font-semibold text-gray-800 md:text-2xl lg:mt-0 xl:text-3xl']")
-    await expect(tit_msg).toHaveText('Dashboard')
-    await expect(page).toHaveURL(/.*dashboard/);
+    await login.loginSwag();
 
-    //redirect to product page
-    await page.getByText('Menu').click();
-    await page.getByRole('link', { name: 'Product' }).click()
-    await expect(page).toHaveURL(/.*product/);
+    prod = new productPage(page)
 
-    await page.fill("input[placeholder='Search product']", 'Vikram')
-    await page.waitForTimeout(10000);
-    await expect(await page.locator("div[class='Card Card--rounded Card--raised Card--seperated Card--padding-normal Card--color-default'] span:nth-child(2)")).toBeVisible()
-})
+});
+
+test('Sorting products from Z to A', async ({ page }) => {
+    await expect(page.locator(prod.productTitle)).toHaveText('Products');
+
+    // Get items sorted by default
+    const defaultSortedItems = await prod.sortingIcon();
+
+    // Select Z to A option
+    await prod.selectZToA();
+
+    // Wait for items to be sorted
+    const sortedItems = await prod.resultSorting();
+
+    // Verify that the sorted items are sorted in descending order
+    expect(sortedItems).toEqual(defaultSortedItems.reverse());
+
+});
+
+
+test('Add and remove product from cart', async ({ page }) => {
+    //add prdouct to the cart
+    await prod.add_cart_btn_single_prod()
+
+    // Navigate to the shopping cart
+    await prod.shopping_cart_badge()
+    await expect(page).toHaveURL('https://www.saucedemo.com/cart.html')
+    
+
+    //Your cart page assertion
+    await expect(page.locator(prod.productTitle)).toHaveText('Your Cart')
+    await expect(page.locator(prod.qtyLabel)).toContainText('QTY')
+    await expect(page.locator(prod.descriptionLbl)).toContainText('Description')
+    await expect(page.locator(prod.removeBtn)).toHaveText('Remove')
+    await expect(page.locator(prod.continueShoppingBtn)).toHaveText('Continue Shopping')
+    await expect(page.locator(prod.checkoutBtn)).toHaveText('Checkout')
+    await expect(page.locator(prod.cartItemName)).toBeVisible()
+
+     // Remove product from the cart
+    await prod.remove_product_cart()
+
+    //// Ensure the product is removed from the cart
+    await expect(page.locator(prod.cartItemName)).not.toBeVisible();
+
+    //Ensure the cart badge is empty
+    await expect(page.locator(prod.shoppingCart)).not.toBeVisible();
+
+
+});
+
+
+// test('Verifying validation for Checkout: Your Information', async ({ page }) => {
+
+
+// });
+
+// test('Checkout process with single product', async ({ page }) => {
+
+
+// });
+
+// test('Checkout process with multiple products', async ({ page }) => {
+
+
+// });

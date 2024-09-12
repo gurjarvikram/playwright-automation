@@ -20,14 +20,13 @@ class productPage {
         this.continueShoppingBtn = '#continue-shopping';
         this.checkoutBtn = '#checkout';
         this.removeBtn = '#remove-sauce-labs-backpack';
-        this.finishBtn = '#finish';
-        this.cancelBtn = '#cancel';
-        this.paymentInfo = "div[data-test='payment-info-label']";
-        this.shippingInfo = "div[data-test='shipping-info-label']";
-        this.priceTotal = "div[data-test='total-info-label']";
+       
+        this.firstNameLoc = "#first-name";
+        this.lastNameLoc = "#last-name";
+        this.zipCodeLoc = "#postal-code";
+        
 
     }
-
 
     async sortingIcon() {
         // Select all items with the selector `cartItemName`
@@ -48,18 +47,32 @@ class productPage {
 
     async add_cart_btn_single_prod() {
         await this.page.locator(this.addCartBtn).click()
-
     }
 
     async shopping_cart_badge() {
         await this.page.locator(this.shoppingCart).click()
-
     }
-
 
     async remove_product_cart() {
         await this.page.locator(this.removeBtn).click()
+    }
 
+    async clickCheckoutButton() {
+        await this.page.locator(this.checkoutBtn).click()
+    }
+
+    async continueButtonClick() {
+        await this.page.locator(this.continueBtn).click()
+    }
+
+    async firstNameInput() {
+        await this.page.locator(this.firstNameLoc).fill(firstName)
+    }
+    async lastNameInput() {
+        await this.page.locator(this.lastNameLoc).fill(lastName)
+    }
+    async zipCodeInput() {
+        await this.page.locator(this.zipCodeLoc).fill(postalCode)
     }
 
 

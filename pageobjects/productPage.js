@@ -15,16 +15,17 @@ class productPage {
         this.addCartBtn = '#add-to-cart-sauce-labs-backpack';
         this.cartItemName = "div[class='inventory_item_name']";
         this.qtyLabel = '.cart_quantity_label';
-        this.descriptionLbl='.cart_desc_label';
+        this.descriptionLbl = '.cart_desc_label';
         this.continueBtn = '#continue';
         this.continueShoppingBtn = '#continue-shopping';
         this.checkoutBtn = '#checkout';
         this.removeBtn = '#remove-sauce-labs-backpack';
-       
+        this.multipleProductLocator = '.inventory_item_description';
+
         this.firstNameLoc = "#first-name";
         this.lastNameLoc = "#last-name";
         this.zipCodeLoc = "#postal-code";
-        
+
 
     }
 
@@ -68,12 +69,30 @@ class productPage {
     async firstNameInput() {
         await this.page.locator(this.firstNameLoc).fill(firstName)
     }
+
     async lastNameInput() {
         await this.page.locator(this.lastNameLoc).fill(lastName)
     }
+
     async zipCodeInput() {
         await this.page.locator(this.zipCodeLoc).fill(postalCode)
     }
+
+    async addFirstTwoProducts() {
+        const productLocator = this.page.locator(this.multipleProductLocator);
+    
+        // Add only the first two visible products
+        for (let i = 0; i < 2; i++) {
+            const product = productLocator.nth(i);
+    
+            if (await product.isVisible()) {
+                console.log(`Adding product ${i + 1} to cart`);
+                await product.locator('text="Add to cart"').click();
+                await this.page.waitForTimeout(1000); // Ensure product is added
+            }
+        }
+    }
+    
 
 
 

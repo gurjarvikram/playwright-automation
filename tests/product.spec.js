@@ -98,7 +98,7 @@ test('Verifying validation for Checkout: Your Information', async ({ page }) => 
 
 });
 
-test('Checkout process with single product', async ({ page }) => {
+test.only('Checkout process with single product', async ({ page }) => {
     // Add a single product to the cart
     await prod.add_cart_btn_single_prod()
 
@@ -132,7 +132,9 @@ test('Checkout process with single product', async ({ page }) => {
 
     await checkOverview.finishButtonCheckout()
     // Complete the order and verify the confirmation message
-    await expect(page.locator(checkOverview.orderConfirmMsg)).toContainText('Thank you for your order!')    
+    await expect(page.locator(checkOverview.orderConfirmMsg)).toContainText('Thank you for your order!')  
+    await page.locator(prod.productPage).waitFor;
+    await expect(page.locator(prod.productTitle)).toHaveText('Checkout: Complete!')  //Checkout: Complete!
     await expect(page.locator(checkOverview.backButtonCompleteOrder)).toBeVisible() //Back home button
 
 });

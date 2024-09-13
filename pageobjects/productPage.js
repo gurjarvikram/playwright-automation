@@ -10,7 +10,7 @@ class productPage {
     constructor(page) {
         this.page = page;
         this.productSort = '.product_sort_container';
-        this.productTitle = '.title';
+        this.productTitle = '.title';       // Common locator for all left-side page titles
         this.shoppingCart = ".shopping_cart_badge";
         this.addCartBtn = '#add-to-cart-sauce-labs-backpack';
         this.cartItemName = "div[class='inventory_item_name']";

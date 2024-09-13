@@ -102,7 +102,7 @@ test('Checkout process with single product', async ({ page }) => {
     // Add a single product to the cart
     await prod.add_cart_btn_single_prod()
 
-     // Navigate to the shopping cart page and verify the cart is displayed
+    // Navigate to the shopping cart page and verify the cart is displayed
     await prod.shopping_cart_badge()
     await expect(page.locator(prod.productTitle)).toBeVisible()
 
@@ -124,7 +124,7 @@ test('Checkout process with single product', async ({ page }) => {
     await expect(page.locator(prod.cartItemName)).toContainText('Sauce Labs Backpack')
     await expect(page.locator(checkOverview.cancelBtn)).toBeVisible()
     await expect(page.locator(checkOverview.finishBtn)).toBeVisible()
-    await expect(page.locator(checkOverview.paymentInfo)).toHaveText('Payment Information:')    
+    await expect(page.locator(checkOverview.paymentInfo)).toHaveText('Payment Information:')
     await expect(page.locator(checkOverview.shippingInfo)).toContainText('Shipping Information:')
     await expect(page.locator(checkOverview.priceTotal)).toContainText('Price Total')
     await expect(page.locator(checkOverview.itemTotal)).toBeVisible()
@@ -132,16 +132,52 @@ test('Checkout process with single product', async ({ page }) => {
 
     await checkOverview.finishButtonCheckout()
     // Complete the order and verify the confirmation message
-    await expect(page.locator(checkOverview.orderConfirmMsg)).toContainText('Thank you for your order!')  
+    await expect(page.locator(checkOverview.orderConfirmMsg)).toContainText('Thank you for your order!')
     await page.locator(prod.productPage).waitFor;
     const wool = await page.locator(prod.productTitle).isVisible()  //Checkout: Complete!
-    console.log(wool);
     expect(wool).toBeTruthy;
     await expect(page.locator(checkOverview.backButtonCompleteOrder)).toBeVisible() //Back home button
 
 });
 
 test('Checkout process with multiple products', async ({ page }) => {
+    // Add the first two products to the cart
+    await prod.addFirstTwoProducts()
+
+    // Navigate to the shopping cart
+    await prod.shopping_cart_badge()
+    await expect(page.locator(prod.productTitle)).toBeVisible()  //Your Cart
+
+    // Assert that there are exactly two items in the cart
+    await expect(page.locator(prod.cartItemName)).toHaveCount(2);
+
+    // Proceed to the checkout page and verify the title
+    await prod.clickCheckoutButton()
+    await expect(page.locator(prod.productTitle)).toHaveText('Checkout: Your Information')
+
+    // Fill out the customer information form and submit
+    await prod.firstNameInput()
+    await prod.lastNameInput()
+    await prod.zipCodeInput()
+    await prod.continueButtonClick()
+
+    // Verify that the user is taken to the checkout overview page and validate the details
+    await expect(page.locator(prod.cartItemName)).toHaveCount(2);
+    await expect(page.locator(checkOverview.paymentInfo)).toHaveText('Payment Information:')
+    await expect(page.locator(checkOverview.shippingInfo)).toContainText('Shipping Information:')
+    await expect(page.locator(checkOverview.priceTotal)).toContainText('Price Total')
+    await expect(page.locator(checkOverview.itemTotal)).toBeVisible()
+    await expect(page.locator(checkOverview.taxTotal)).toBeVisible()
+
+    // Complete the order
+    await checkOverview.finishButtonCheckout()
+    // Complete the order and verify the confirmation message
+    await expect(page.locator(checkOverview.orderConfirmMsg)).toContainText('Thank you for your order!')
+    await page.locator(prod.productPage).waitFor;
+    const wool = await page.locator(prod.productTitle).isVisible()  //Checkout: Complete!
+    console.log(wool);
+    expect(wool).toBeTruthy;
+    await expect(page.locator(checkOverview.backButtonCompleteOrder)).toBeVisible() //Back home button
 
 
 });

@@ -1,0 +1,3 @@
+Adding product 1 to cart
+Adding product 2 to cart
+true

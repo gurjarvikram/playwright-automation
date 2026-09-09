@@ -8,7 +8,7 @@ on:
   # A nightly run against production catches breakage that comes from the application or the
   # environment rather than from a commit — which no push-triggered pipeline can see.
   schedule:
-    - cron: '0 2 * * *'
+    - cron: '0 2 1 1,4,7,10 *'
   workflow_dispatch:
     inputs:
       tags:
@@ -121,7 +121,7 @@ jobs:
         with:
           name: artifacts-smoke
           path: artifacts
-          retention-days: 7
+          retention-days: 3
           if-no-files-found: ignore
 
   # ---------------------------------------------------------------------------------
@@ -184,7 +184,7 @@ jobs:
         with:
           name: allure-results-${{ matrix.browser }}
           path: allure-results
-          retention-days: 14
+          retention-days: 1
           if-no-files-found: warn
 
       - name: Upload failure artefacts
@@ -193,7 +193,7 @@ jobs:
         with:
           name: artifacts-${{ matrix.browser }}
           path: artifacts
-          retention-days: 7
+          retention-days: 3
           if-no-files-found: ignore
 
   # ---------------------------------------------------------------------------------
@@ -254,5 +254,5 @@ jobs:
         with:
           name: allure-report
           path: allure-report
-          retention-days: 14
+          retention-days: 3
           if-no-files-found: warn
